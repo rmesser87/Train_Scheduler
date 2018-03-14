@@ -1,3 +1,10 @@
+body {
+    background: url(../images/maxresdefault.jpg);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+
 .time-selector{
     float: right;
     width: 100px;
@@ -8,6 +15,8 @@
     margin: 50px;
     padding: 30px;
     border: 1px solid black;
+    width: 95%;
+    background: rgba(220, 220, 220, 0.8)
 }
 
 .time{
@@ -36,4 +45,11 @@ h3{
     margin: 50px;
     padding: 30px;
     border: 1px solid black;
+    width: 95%;
+    background: rgba(220, 220, 220, 0.8)
+}
+
+.jumbotron{
+    background: lightgrey;
+    border-bottom: 3px solid black;
 }

@@ -18,11 +18,26 @@ $(document).ready(function () {
     dbRef.on('child_added', function (childSnapshot) {
         var snap = childSnapshot.val();
         var date = snap.FirstDeparture;
-        var dateUnix = moment(convertedDate).format("X");
-        var dateFormat = "MMMM Do YYYY, h:mm:ss a";
-        var convertedDate = moment(date, dateFormat);
 
-        console.log(snap.TrainName);
+        var dateFormat = "h:mm a";
+        
+        var tFrequency = snap.Frequency;
+        var firstDeparture = snap.FirstDeparture;
+        var firstDepartureConverted = moment(firstDeparture, dateFormat).subtract(1, "years");
+        console.log(firstDepartureConverted);
+        var currentTime = moment().format(dateFormat);
+        console.log(currentTime);
+        var diffTime = moment(currentTime, dateFormat).diff(moment(firstDepartureConverted), "minutes");
+        console.log(diffTime);
+        var tRemainder = diffTime % tFrequency;
+        console.log(tRemainder)
+        var tMinutesTillTrain = tFrequency - tRemainder;
+        console.log(tMinutesTillTrain);
+        var nextTrainRaw = moment().add(tMinutesTillTrain, "minutes");
+        console.log(nextTrainRaw);
+        var nextTrain = moment(nextTrainRaw).format("LT");
+        console.log(nextTrain);
+
 
         var row = $("<tr>").attr({
             class: "info-row"
@@ -39,19 +54,15 @@ $(document).ready(function () {
         var arrivalCell = $("<td>").attr({
             class: "info-cell"
         });
-        var rateCell = $("<td>").attr({
-            class: "info-cell"
-        });
         var etaCell = $("<td>").attr({
             class: "info-cell"
         });
         $(nameCell).text(snap.TrainName);
         $(destinationCell).text(snap.Destination);
         $(frequencyCell).text(snap.Frequency);
-        // $(monthsCell).text(monthsWorked);
-        // $(rateCell).text(snap.MonthlyRate);
-        // $(billedCell).text(totalBilled);
-        $(row).append(nameCell, destinationCell, frequencyCell);
+        $(arrivalCell).text(nextTrain);
+        $(etaCell).text(tMinutesTillTrain);
+        $(row).append(nameCell, destinationCell, frequencyCell, arrivalCell, etaCell);
         $("#table-body").append(row);
 
 
@@ -59,33 +70,42 @@ $(document).ready(function () {
     });
 
 
-
-    $(document).ready(function () {
-        console.log("Button Pushed1");
-        $(document).on("click", "#submit-info", function () {
-            event.preventDefault();
-            console.log("Button Pushed2");
-            var trainName = $("#train-name").val().trim();
-            var destinationName = $("#destination-name").val().trim();
-            var departureTimeRaw = $("#raw-time").val().trim();
-            var departureTimeAmpm = $("#ampm-time").val().trim().toLowerCase();
-            var trainFrequency = $("#frequency-selector").val().trim();
-            var currentDay = moment().format('LL');
-            var departureTime = currentDay + ", " + departureTimeRaw + " " + departureTimeAmpm
+    // dataRef.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function(snapshot) {}
 
 
-            // console.log(trainName);
-            // console.log(destinationName);
-            // console.log(departureTime);
-            // console.log(trainFrequency);
-            // console.log(currentDay);
+    $(document).on("click", "#submit-info", function () {
+        event.preventDefault();
+        console.log("Button Pushed2");
+        var trainName = $("#train-name").val().trim();
+        var destinationName = $("#destination-name").val().trim();
+        var departureTimeRaw = $("#raw-time").val().trim();
+        var departureTimeAmpm = $("#ampm-time").val().trim().toLowerCase();
+        var trainFrequency = $("#frequency-selector").val().trim();
+        // var currentDay = moment().format('LT');
+        var departureTime = departureTimeRaw + " " + departureTimeAmpm
 
-            database.ref('Trains/').push({
-                TrainName: trainName,
-                Destination: destinationName,
-                FirstDeparture: departureTime,
-                Frequency: trainFrequency
-            });
-        })
+
+        // console.log(trainName);
+        // console.log(destinationName);
+        // console.log(departureTime);
+        // console.log(trainFrequency);
+        // console.log(currentDay);
+
+        database.ref('Trains/').push({
+            TrainName: trainName,
+            Destination: destinationName,
+            FirstDeparture: departureTime,
+            Frequency: trainFrequency
+        });
+
+        $("#train-name").val(" ");
+        $("#destination-name").val(" ");
+        $("#raw-time").val(" ");
+        $("#ampm-time").val(" ");
+        $("#frequency-selector").val(" ");
+        
+        
+        
     });
+
 })
