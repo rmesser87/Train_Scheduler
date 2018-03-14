@@ -1,0 +1,39 @@
+.time-selector{
+    float: right;
+    width: 100px;
+    margin-left: 15px;
+}
+
+.form{
+    margin: 50px;
+    padding: 30px;
+    border: 1px solid black;
+}
+
+.time{
+    margin-left: 15px;
+}
+
+h2{
+    font-size: 25px;
+    background-color: black;
+    color: white;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+}
+
+h3{
+    font-size: 25px;
+    background-color: black;
+    color: white;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+}
+
+.table{
+    margin: 50px;
+    padding: 30px;
+    border: 1px solid black;
+}
